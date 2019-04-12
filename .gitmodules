@@ -1,0 +1,3 @@
+[submodule "lib/libmat"]
+	path = lib/libmat
+	url = https://github.com/jloro/libmat.git
