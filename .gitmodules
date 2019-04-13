@@ -1,3 +1,6 @@
 [submodule "lib/libmat"]
 	path = lib/libmat
 	url = https://github.com/jloro/libmat.git
+[submodule "lib/glfw"]
+	path = lib/glfw
+	url = https://github.com/glfw/glfw.git
