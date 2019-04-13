@@ -1,6 +1,7 @@
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
-GLFLAGS = -framework CoreVideo -framework OpenGL -framework IOKit -framework AppKit -L $(LIB_PATH)glfw/build/src -lglfw3
+GLFLAGS = -framework CoreVideo -framework OpenGL -framework IOKit -framework AppKit
+LIBFLAGS = -lglfw3 -lft -lmat
 
 EXEC_NAME = scop
 SRC_FILES = main.c \
@@ -12,23 +13,23 @@ OBJ_FILES = $(SRC_FILES:.c=.o)
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 LIB_PATH = ./lib/
-INC_PATH = ./inc/
+INC_PATH = ./inc/ $(LIB_PATH)glfw/include/ $(LIB_PATH)libft/ $(LIB_PATH)libmat/inc
 
-LIBMAT = libmat
-LIBFT = libft
+LIBS = libmat libft glfw/src/src
 
 SRCS = $(addprefix $(SRC_PATH),$(SRC_FILES))
 OBJS = $(addprefix $(OBJ_PATH),$(OBJ_FILES))
-INCS = -I $(INC_PATH) -I $(LIB_PATH)glfw/include/ -I $(LIB_PATH)libft/ -I $(LIB_PATH)libmat/inc
+INCS = $(addprefix -I, $(INC_PATH))
+LIB = $(addprefix -L$(LIB_PATH),$(LIBS))
 
 .PHONY : all clean fclean re
 
 all : $(EXEC_NAME)
 
-$(EXEC_NAME) : $(LIBMAT) $(LIBFT) $(OBJS)
-#	cmake -S $(LIB_PATH)glfw -B $(LIB_PATH)glfw/build
-#	make -C $(LIB_PATH)glfw/build
-	@$(CC) $(FLAGS) $(GLFLAGS) lib/libft/libft.a lib/libmat/libmat.a -o $(EXEC_NAME) $(OBJS)
+$(EXEC_NAME) : $(OBJS)
+	@make -C $(LIB_PATH)libft
+	@make -C $(LIB_PATH)libmat
+	@$(CC) $(FLAGS) $(LIB) $(LIBFLAGS) $(GLFLAGS) -o $(EXEC_NAME) $(OBJS)
 	@echo "$(EXEC_NAME) compiled ✓"
 
 $(OBJ_PATH)%.o : $(SRC_PATH)%.c
@@ -36,19 +37,16 @@ $(OBJ_PATH)%.o : $(SRC_PATH)%.c
 	@$(CC) $(FLAGS) $(INCS) -o $@ -c $<
 	@echo "$@ created ✓"
 
-$(LIBMAT):
-	make -C lib/libmat/
-
-$(LIBFT):
-	make -C lib/libft/
-
 clean :
+	@make -C $(LIB_PATH)libmat clean
+	@make -C $(LIB_PATH)libft clean
 	@/bin/rm -rf $(OBJ_PATH)
 	@echo "Objects cleaned ✓"
 
 fclean : clean
+	@make -C $(LIB_PATH)libmat fclean
+	@make -C $(LIB_PATH)libft fclean
 	@/bin/rm -f $(EXEC_NAME)
-	#@/bin/rm -rf $(LIB_PATH)glfw/build
 	@echo "$(EXEC_NAME) deleted ✓"
 re : 
 	$(MAKE) fclean
