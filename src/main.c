@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 11:04:38 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/12 16:15:13 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/14 16:02:06 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <glad.h>
@@ -19,6 +19,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include "libmat.h"
+
+#define WIDTH_SCREEN 800
+#define HEIGHT_SCREEN 600
+#define F_PLANE 100.0f
+#define N_PLANE 0.1f
+#define FOV 90.0f
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	(void)window;
@@ -66,6 +72,7 @@ int	createShader(int * shader, GLenum shaderType, const char * source)
 
 void	initShader(unsigned int * shaderProgram, unsigned int * VAO, unsigned int * EBO, unsigned int * VBO)
 {
+	(void)EBO;
 	int success;
 	char infoLog[512];
 	char *	vertexShaderSource;
@@ -73,14 +80,47 @@ void	initShader(unsigned int * shaderProgram, unsigned int * VAO, unsigned int *
 	char *	fragmentShaderSource;
 	fragmentShaderSource = readShader("shaders/fragShader.glsl");
 	float vertices[] = {
-		0.5f, 0.75f, 0.0f,
-		0.5f, -0.75f, 0.0f,
-		-0.5f, -0.75f, 0.0f,
-		-0.5f, 0.75f, 0.0f
-	};
-	unsigned int faces[] = {
-		0, 1, 3,
-		1, 2, 3
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+
+		-0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
+
+		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f
 	};
 	int vertexShader;
 	//createShader(&vertexShader, GL_VERTEX_SHADER, vertexShaderSource);
@@ -114,19 +154,15 @@ void	initShader(unsigned int * shaderProgram, unsigned int * VAO, unsigned int *
 		glGetProgramInfoLog(*shaderProgram, 512, NULL, infoLog);
 		printf("ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n%s", infoLog);
 	}
-	glDeleteShader(vertexShader);
+    glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 	glGenVertexArrays(1, VAO);
 	glGenBuffers(1, VBO);
-	glGenBuffers(1, EBO);
 
 	glBindVertexArray(*VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, *VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(faces), faces, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -152,24 +188,20 @@ unsigned int	loadtexture(int w, int h, unsigned char * data)
 
 int main()
 {
-	t_vec4	vec;
 	t_mat4	trans;
+	t_mat4	proj;
+	t_mat4	model;
+	t_mat4	view;
+	float	t = tan(degtorad(FOV / 2)) * N_PLANE;
+	float	ar = WIDTH_SCREEN / HEIGHT_SCREEN;
+	float r = t * ar;
 
-	trans = ft_mat4_set(1.0f, 1);
-	vec = ft_vec4_set(10.0f, 10.0f, 10.0f, 1.0f);
-	trans = ft_mat4_trans(trans, 0.5f, -0.5f, 0.0);
-	int i =  0;
-	while (i < 16)
-	{
-		printf("%f ", trans.m[i]);
-		i++;
-	}
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGl", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(WIDTH_SCREEN, HEIGHT_SCREEN, "LearnOpenGl", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	if (window == NULL)
 	{
@@ -189,22 +221,40 @@ int main()
 	unsigned int VBO;
 	initShader(&shaderProgram, &VAO, &EBO, &VBO);
 
+	glEnable(GL_DEPTH_TEST);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	while (!glfwWindowShouldClose(window))
 	{
 		leave(window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		trans = ft_mat4_set(1.0f, 1);
-		trans = ft_mat4_rot(trans, (float)glfwGetTime(), Z_AXIS);
-		trans = ft_mat4_trans(trans, 0.5f, -0.5f, 0.0);
-		unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-		glUniformMatrix4fv(transformLoc, 1, GL_TRUE, trans.m);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(shaderProgram);
+		proj = mat4_set(0.0f, 0);
+		model = mat4_set(1.0f, 1);
+		trans = mat4_set(1.0f, 1);
+		view = mat4_set(1.0f, 1);
+        trans = mat4_trans(trans, 0.0f, 0.0f, -10.0f);
+		view = mat4_look_at(vec3_set(0.0f, 1.0f, 0.0f), vec3_set(0.0f, 0.0f, 0.0f), vec3_set(0.0f, 0.0f, 3.0f));
+		proj.m[0] = 1 / r;
+		proj.m[5] = 1 / t;
+		proj.m[10] = -(F_PLANE + N_PLANE) / (F_PLANE - N_PLANE);
+		proj.m[11] = -(2 * F_PLANE * N_PLANE) / (F_PLANE - N_PLANE);
+		proj.m[14] = -1;
+
+		unsigned int transLoc = glGetUniformLocation(shaderProgram, "transform");
+		glUniformMatrix4fv(transLoc, 1, GL_TRUE, trans.m);
+		unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
+		glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.m);
+		unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.m);
+		unsigned int projLoc = glGetUniformLocation(shaderProgram, "projection");
+		glUniformMatrix4fv(projLoc, 1, GL_TRUE, proj.m);
+
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
