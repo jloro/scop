@@ -7,6 +7,11 @@ EXEC_NAME = scop
 SRC_FILES = main.c \
 			glad.c \
 			xpm.c \
+			initGlfw.c \
+			callback.c \
+			init_mat.c \
+			parsing.c \
+			shader.c \
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
@@ -15,7 +20,7 @@ OBJ_PATH = ./obj/
 LIB_PATH = ./lib/
 INC_PATH = ./inc/ $(LIB_PATH)glfw/include/ $(LIB_PATH)libft/ $(LIB_PATH)libmat/inc
 
-LIBS = libmat libft glfw/src/src
+LIBS = libmat libft glfw/build/src
 
 SRCS = $(addprefix $(SRC_PATH),$(SRC_FILES))
 OBJS = $(addprefix $(OBJ_PATH),$(OBJ_FILES))
