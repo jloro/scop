@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:10:53 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/15 17:36:58 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/16 14:14:50 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,12 @@ char *			readShader(char *file)
 	int		len;
 	char	*line;
 
-	fd = open(file, O_RDONLY);
+	if ((fd = open(file, O_RDONLY)) == -1)
+		return (NULL);
 	len = lseek(fd, 0, SEEK_END);
 	lseek(fd, 0, SEEK_SET);
-	line = (char *)malloc(sizeof(char) * (len + 1));
+	if ((line = (char *)malloc(sizeof(char) * (len + 1))) == NULL)
+		return (NULL);
 	read(fd, line, len);
 	line[len] = '\0';
 	return (line);
@@ -64,8 +66,10 @@ int			compileShader(t_env *env)
 	char	infoLog[512];
 
 	ft_putendl("Compile Shader");
-	shaderSource[0] = readShader("shaders/vertexShader.glsl");
-	shaderSource[1] = readShader("shaders/fragShader.glsl");
+	if ((shaderSource[0] = readShader("shaders/vertexShader.glsl")) == NULL)
+		return (0);
+	if ((shaderSource[1] = readShader("shaders/fragShader.glsl")) == NULL)
+		return (0);
 	createShader(&(shader[0]), GL_VERTEX_SHADER, shaderSource[0]);
 	createShader(&(shader[1]), GL_FRAGMENT_SHADER, shaderSource[1]);
 	env->shaderProgram = glCreateProgram();

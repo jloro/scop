@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 15:04:36 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/15 17:22:56 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/16 16:11:25 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <stdio.h>
 
 int			sendOpenGL(t_parse *info, t_env *env)
 {
@@ -28,10 +29,10 @@ int			sendOpenGL(t_parse *info, t_env *env)
 	glBindVertexArray(env->VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, env->VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(info->vertex), info->vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * info->nbVertex * 3, info->vertex, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, env->EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(info->faces), info->faces, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * info->nbFace * 3, info->faces, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -47,6 +48,7 @@ int			get(int fd, t_parse *info)
 {
 	char	*line;
 	float	tmp[3];
+	unsigned int	tmp2[3];
 	int		i;
 
 	i = 0;
@@ -62,14 +64,14 @@ int			get(int fd, t_parse *info)
 		}
 		if (ft_strcmp(line, "") == 0)
 		{
-			i = 0;
+			i = -3;
 		}
 		if (line[0] == 'f')
 		{
-			sscanf(line, "f %f %f %f", &tmp[0], &tmp[1], &tmp[2]);
-			info->faces[i] = tmp[0];
-			info->faces[i + 1] = tmp[1];
-			info->faces[i + 2] = tmp[2];
+			sscanf(line, "f %u %u %u", &tmp2[0], &tmp2[1], &tmp2[2]);
+			info->faces[i] = tmp2[0] - 1;
+			info->faces[i + 1] = tmp2[1] - 1;
+			info->faces[i + 2] = tmp2[2] - 1;
 		}
 		free(line);
 		i += 3;
@@ -92,8 +94,9 @@ int			count(int fd, t_parse *info)
 			info->nbFace++;
 		free(line);
 	}
+	printf("f: %d v: %d\n", info->nbFace, info->nbVertex);
 	info->vertex = (float*)malloc(sizeof(float) * info->nbVertex * 3);
-	info->faces = (float*)malloc(sizeof(float) * info->nbFace * 3);
+	info->faces = (unsigned int*)malloc(sizeof(unsigned int) * info->nbFace * 3);
 	return (1);
 }
 
@@ -108,6 +111,7 @@ int			parse(t_env *env, char *file)
 		return (0);
 	}
 	count(fd, &info);	
+	env->nbFace = info.nbFace;
 	lseek(fd, 0, SEEK_SET);
 	get(fd, &info);
 	close(fd);
