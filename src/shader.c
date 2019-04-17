@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:10:53 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/16 14:14:50 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/17 13:26:40 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ int			compileShader(t_env *env)
 	}
 	glDeleteShader(shader[0]);
 	glDeleteShader(shader[1]);
+	free(shaderSource[0]);
+	free(shaderSource[1]);
 	ft_putendl("Finish");
 	return (1);
 }

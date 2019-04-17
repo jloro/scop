@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 15:04:36 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/16 16:11:25 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/17 13:45:54 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 int			sendOpenGL(t_parse *info, t_env *env)
 {
-	ft_putendl("Send vertex/face to openCL");
+	ft_putendl("Send vertices/face to openCL");
 	glGenVertexArrays(1, &env->VAO);
 	glGenBuffers(1, &env->VBO);
 	glGenBuffers(1, &env->EBO);
@@ -29,7 +29,7 @@ int			sendOpenGL(t_parse *info, t_env *env)
 	glBindVertexArray(env->VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, env->VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * info->nbVertex * 3, info->vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * info->nbVertices * 3, info->vertices, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, env->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * info->nbFace * 3, info->faces, GL_STATIC_DRAW);
@@ -44,59 +44,71 @@ int			sendOpenGL(t_parse *info, t_env *env)
 	return (1);
 }
 
-int			get(int fd, t_parse *info)
+int			addVertice(char *line, t_parse *info)
 {
-	char	*line;
-	float	tmp[3];
-	unsigned int	tmp2[3];
-	int		i;
+	float	*tmp;
+	unsigned int	i;
 
-	i = 0;
-	ft_putendl("Start parsing");
-	while (get_next_line(fd, &line) > 0)
-	{
-		if (line[0] == 'v')
-		{
-			sscanf(line, "v %f %f %f", &tmp[0], &tmp[1], &tmp[2]);
-			info->vertex[i] = tmp[0];
-			info->vertex[i + 1] = tmp[1];
-			info->vertex[i + 2] = tmp[2];
-		}
-		if (ft_strcmp(line, "") == 0)
-		{
-			i = -3;
-		}
-		if (line[0] == 'f')
-		{
-			sscanf(line, "f %u %u %u", &tmp2[0], &tmp2[1], &tmp2[2]);
-			info->faces[i] = tmp2[0] - 1;
-			info->faces[i + 1] = tmp2[1] - 1;
-			info->faces[i + 2] = tmp2[2] - 1;
-		}
-		free(line);
-		i += 3;
-	}
-	ft_putendl("End parsing");
+	i = -1;
+	info->nbVertices++;
+	if ((tmp = (float*)malloc(sizeof(float) * info->nbVertices * 3)) == NULL)
+		return (0);
+	while (++i < (info->nbVertices - 1) * 3)
+		tmp[i] = info->vertices[i];
+	free(info->vertices);
+	if (!sscanf(line, "v %f %f %f", &tmp[info->nbVertices * 3 - 3],
+				&tmp[info->nbVertices * 3 - 2], &tmp[info->nbVertices * 3 - 1]))
+		return (0);
+	info->vertices = tmp;
 	return (1);
 }
 
-int			count(int fd, t_parse *info)
+int			addFace(char *line, t_parse *info, int double_face)
 {
-	char	*line;
+	unsigned int	*tmp;
+	unsigned int	tmp2;
+	unsigned int	i;
 
-	info->nbVertex = 0;
-	info->nbFace = 0;
+	i = -1;
+	info->nbFace++;
+	if ((tmp = (unsigned int*)malloc(sizeof(unsigned int) * info->nbFace * 3)) == NULL)
+		return (0);
+	while (++i < (info->nbFace - 1) * 3)
+		tmp[i] = info->faces[i];
+	free(info->faces);
+	if (double_face == 3 && !sscanf(line, "f %u %u %u",
+				&tmp[info->nbFace * 3 - 3], &tmp[info->nbFace * 3 - 2]
+				, &tmp[info->nbFace * 3 - 1]))
+		return (0);
+	else if (double_face == 4 &&!sscanf(line, "f %u %u %u %u", &tmp[info->nbFace * 3 - 3],
+				&tmp[info->nbFace * 3 - 2], &tmp[info->nbFace * 3 - 1], &tmp2))
+		return (0);
+	else if (double_face == 0 &&!sscanf(line, "f %u %u %u %u", &tmp2, &tmp[info->nbFace * 3 - 3],
+				&tmp[info->nbFace * 3 - 2], &tmp[info->nbFace * 3 - 1]))
+		return (0);
+	tmp[info->nbFace * 3 - 3]--;
+	tmp[info->nbFace * 3 - 2]--;
+	tmp[info->nbFace * 3 - 1]--;
+	info->faces = tmp;
+	if (double_face == 4)
+		addFace(line, info, 0);
+	return (1);
+}
+
+int			get(int fd, t_parse *info)
+{
+	char			*line;
+
+	ft_putendl("Start parsing");
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (line[0] == 'v' && line[1] == ' ')
-			info->nbVertex++;
-		else if (line[0] == 'f' && line[1] == ' ')
-			info->nbFace++;
+			addVertice(line, info);
+		else if (line[0] == 'f')
+			addFace(line, info, ft_compte_c(line, ' '));
 		free(line);
 	}
-	printf("f: %d v: %d\n", info->nbFace, info->nbVertex);
-	info->vertex = (float*)malloc(sizeof(float) * info->nbVertex * 3);
-	info->faces = (unsigned int*)malloc(sizeof(unsigned int) * info->nbFace * 3);
+	ft_putendl("End parsing");
 	return (1);
 }
 
@@ -110,13 +122,17 @@ int			parse(t_env *env, char *file)
 		ft_putendl(strerror(errno));
 		return (0);
 	}
-	count(fd, &info);	
-	env->nbFace = info.nbFace;
-	lseek(fd, 0, SEEK_SET);
+	info.nbFace = 0;
+	info.nbVertices = 0;
+	info.vertices = (float*)malloc(sizeof(float) * info.nbVertices);
+	info.faces = (unsigned int*)malloc(sizeof(unsigned int) * info.nbFace);
 	get(fd, &info);
 	close(fd);
+	printf("%u\n", info.nbFace);
+	for (unsigned int i = 0; i < info.nbFace * 3; i+=3)
+		printf("%u %u %u\n", info.faces[i], info.faces[i + 1], info.faces[i + 2]);
 	sendOpenGL(&info, env);
-	free(info.vertex);
+	free(info.vertices);
 	free(info.faces);
-	return (0);	
+	return (0);
 }

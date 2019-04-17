@@ -9,6 +9,6 @@ out vec3 color;
 
 void main()
 {
-	gl_Position = model * vp * transform *  vec4(aPos, 1.0);
+	gl_Position = vp * model * transform *  vec4(aPos, 1.0);
 	color = aPos;
 }

@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/16 16:52:24 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/17 17:15:02 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,21 @@
 #include "libmat.h"
 #include <math.h>
 #include <stdio.h>
+
+void		rotate(t_env *env)
+{
+	t_mat4	tmp;
+
+	tmp = mat4_cpy(env->model);
+	env->model.m[3] = 0;
+	env->model.m[7] = 0;
+	env->model.m[11] = 0;
+	env->model = mat4_rot(env->model, degtorad(5), vec3_set(0.0f, 1.0f, 0.0f));
+	env->model.m[3] = tmp.m[3];
+	env->model.m[7] = tmp.m[7];
+	env->model.m[11] = tmp.m[11];
+}
+
 int			loop(t_env *env)
 {
 	ft_putendl("start loop");
@@ -29,15 +44,15 @@ int			loop(t_env *env)
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (env->polygon)
+		if (env->polygon.active)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		else
-			glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+			glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+
+		if (env->move.active)
+			rotate(env);
 		glUseProgram(env->shaderProgram);
 
-		env->trans = mat4_rot(env->trans, (float)glfwGetTime(), vec3_set(0.0f, 1.0f, 0.0f));
-		env->trans = mat4_rot(env->trans, (float)glfwGetTime(), vec3_set(1.0f, 0.0f, 0.0f));
-		env->trans = mat4_rot(env->trans, (float)glfwGetTime(), vec3_set(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(env->transformLoc, 1, GL_TRUE, env->trans.m);
 		glUniformMatrix4fv(env->vpLoc, 1, GL_FALSE, env->vp.m);
 		glUniformMatrix4fv(env->modelLoc, 1, GL_TRUE, env->model.m);
@@ -55,7 +70,12 @@ int			main(int argc, char **argv)
 {
 	t_env	env;
 
-	env.polygon = 0;
+	env.polygon.active = 0;
+	env.polygon.key = 0;
+	env.move.active = 1;
+	env.move.key = 0;
+	env.shader.key = 0;
+	env.shader.active = 0;
 	if (argc != 2)
 	{
 		ft_putendl("Usage: ./scop file");
