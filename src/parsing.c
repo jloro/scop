@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 15:04:36 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/17 13:45:54 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/18 11:44:12 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ int			addFace(char *line, t_parse *info, int double_face)
 				&tmp[info->nbFace * 3 - 3], &tmp[info->nbFace * 3 - 2]
 				, &tmp[info->nbFace * 3 - 1]))
 		return (0);
-	else if (double_face == 4 &&!sscanf(line, "f %u %u %u %u", &tmp[info->nbFace * 3 - 3],
+	else if (double_face == 4 && !sscanf(line, "f %u %u %u %u", &tmp[info->nbFace * 3 - 3],
 				&tmp[info->nbFace * 3 - 2], &tmp[info->nbFace * 3 - 1], &tmp2))
 		return (0);
-	else if (double_face == 0 &&!sscanf(line, "f %u %u %u %u", &tmp2, &tmp[info->nbFace * 3 - 3],
+	else if (double_face == 0 && !sscanf(line, "f %u %u %u %u", &tmp[info->nbFace * 3 - 3], &tmp2, 
 				&tmp[info->nbFace * 3 - 2], &tmp[info->nbFace * 3 - 1]))
 		return (0);
 	tmp[info->nbFace * 3 - 3]--;
@@ -127,10 +127,9 @@ int			parse(t_env *env, char *file)
 	info.vertices = (float*)malloc(sizeof(float) * info.nbVertices);
 	info.faces = (unsigned int*)malloc(sizeof(unsigned int) * info.nbFace);
 	get(fd, &info);
-	close(fd);
-	printf("%u\n", info.nbFace);
-	for (unsigned int i = 0; i < info.nbFace * 3; i+=3)
+	for (unsigned int i = 0; i < info.nbFace * 3; i += 3)
 		printf("%u %u %u\n", info.faces[i], info.faces[i + 1], info.faces[i + 2]);
+	close(fd);
 	sendOpenGL(&info, env);
 	free(info.vertices);
 	free(info.faces);
