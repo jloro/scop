@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:32:44 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/17 17:15:06 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/18 16:27:22 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,18 @@ typedef struct		s_env
 	t_key			polygon;
 	t_key			move;
 	t_key			shader;
-	t_mat4			trans;
+	//aled jpeu pas lenlever V
+	t_mat4			t;
 }					t_env;
 
 typedef struct		s_parse
 {
-	float			*vertices;
+	GLfloat			*vertices;
 	unsigned int	nbVertices;
-	unsigned int	*faces;
+	GLuint			*faces;
 	unsigned int	nbFace;
+	GLfloat			max;
+	GLfloat			min;
 }					t_parse;
 
 

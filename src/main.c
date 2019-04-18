@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/17 17:15:02 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/18 14:50:20 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void		rotate(t_env *env)
 	env->model.m[3] = 0;
 	env->model.m[7] = 0;
 	env->model.m[11] = 0;
-	env->model = mat4_rot(env->model, degtorad(5), vec3_set(0.0f, 1.0f, 0.0f));
+	env->model = mat4_rot(env->model, degtorad(0.5), vec3_set(0.0f, 1.0f, 0.0f));
 	env->model.m[3] = tmp.m[3];
 	env->model.m[7] = tmp.m[7];
 	env->model.m[11] = tmp.m[11];
@@ -37,7 +37,6 @@ int			loop(t_env *env)
 	glEnable(GL_DEPTH_TEST);
 	while (!glfwWindowShouldClose(env->window))
 	{
-		env->trans = mat4_set(1.0f, 1);
 		key(env->window, env);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -47,13 +46,12 @@ int			loop(t_env *env)
 		if (env->polygon.active)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		else
-			glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		if (env->move.active)
 			rotate(env);
 		glUseProgram(env->shaderProgram);
 
-		glUniformMatrix4fv(env->transformLoc, 1, GL_TRUE, env->trans.m);
 		glUniformMatrix4fv(env->vpLoc, 1, GL_FALSE, env->vp.m);
 		glUniformMatrix4fv(env->modelLoc, 1, GL_TRUE, env->model.m);
 
@@ -63,6 +61,10 @@ int			loop(t_env *env)
 		glfwSwapBuffers(env->window);
 		glfwPollEvents();
 	}
+	glDeleteVertexArrays(1, &env->VAO);
+	glDeleteBuffers(1, &env->VBO);
+	glDeleteBuffers(1, &env->EBO);
+	glfwTerminate();
 	return (1);
 }
 

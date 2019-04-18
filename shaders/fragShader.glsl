@@ -1,10 +1,10 @@
-#version 330 core
+#version 400 core
 out vec4 FragColor;
 
-in vec3 color;
+smooth in vec3 color;
 
 void main()
 {
-	FragColor = vec4(color, 1.0);
+	FragColor = vec4(color, 1.0f);
 }
 
