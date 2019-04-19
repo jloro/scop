@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 15:04:36 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/18 16:39:22 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/19 15:05:26 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,17 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+
+void		calc_max_min(t_parse *info, GLfloat *tmp)
+{
+	info->min.x = info->min.x < tmp[info->nbVertices * 6 - 6] ? info->min.x : tmp[info->nbVertices * 6 - 6];
+	info->max.x = info->max.x > tmp[info->nbVertices * 6 - 6] ? info->max.x : tmp[info->nbVertices * 6 - 6];
+	info->min.y = info->min.y < tmp[info->nbVertices * 6 - 5] ? info->min.y : tmp[info->nbVertices * 6 - 5];
+	info->max.y = info->max.y > tmp[info->nbVertices * 6 - 5] ? info->max.y : tmp[info->nbVertices * 6 - 5];
+	info->min.z = info->min.z < tmp[info->nbVertices * 6 - 4] ? info->min.z : tmp[info->nbVertices * 6 - 4];
+	info->max.z = info->max.z > tmp[info->nbVertices * 6 - 4] ? info->max.z : tmp[info->nbVertices * 6 - 4];
+}
 
 int			sendOpenGL(t_parse *info, t_env *env)
 {
@@ -65,8 +76,7 @@ int			addVertice(char *line, t_parse *info)
 	tmp[info->nbVertices * 6 - 3] = -1;
 	tmp[info->nbVertices * 6 - 2] = -1;
 	tmp[info->nbVertices * 6 - 1] = -1;
-	info->min = info->min < tmp[info->nbVertices * 6 - 5] ? info->min : tmp[info->nbVertices * 6 - 5];
-	info->max = info->max > tmp[info->nbVertices * 6 - 5] ? info->max : tmp[info->nbVertices * 6 - 5];
+	calc_max_min(info, tmp);
 	info->vertices = tmp;
 	return (1);
 }
@@ -106,15 +116,21 @@ int			addFace(char *line, t_parse *info, int double_face)
 int			get(int fd, t_parse *info)
 {
 	char			*line;
+	int				ret;
 
 	ft_putendl("Start parsing");
-	while (get_next_line(fd, &line) > 0)
+	while ((ret = get_next_line(fd, &line)) > 0)
 	{
 		if (line[0] == 'v' && line[1] == ' ')
 			addVertice(line, info);
 		else if (line[0] == 'f')
 			addFace(line, info, ft_compte_c(line, ' '));
 		free(line);
+	}
+	if (ret == -1)
+	{
+		ft_putendl(strerror(errno));
+		return (0);
 	}
 	ft_putendl("End parsing");
 	return (1);
@@ -132,23 +148,32 @@ int			parse(t_env *env, char *file)
 	}
 	info.nbFace = 0;
 	info.nbVertices = 0;
-	info.max = 0;
-	info.min = 0;
 	info.vertices = (GLfloat*)malloc(sizeof(GLfloat) * info.nbVertices);
 	info.faces = (GLuint*)malloc(sizeof(GLuint) * info.nbFace);
-	get(fd, &info);
-	printf("max: %f min: %f \n", info.max, info.min);
+	info.max.y = 0;
+	info.min.y = 0;
+	info.max.x = 0;
+	info.min.x = 0;
+	info.max.z = 0;
+	info.min.z = 0;
+	if (!get(fd, &info))
+		return (0);
+	info.center = vec3_mulf(vec3_add(info.max, info.min), 0.5f);
 	for (unsigned int i = 0; i < info.nbVertices * 6; i += 6)
 	{
-		info.vertices[i + 3] = ((info.vertices[i] - info.min) / (info.max - info.min));
-		info.vertices[i + 4] = ((info.vertices[i + 1] - info.min) / (info.max - info.min));
-		info.vertices[i + 5] = ((info.vertices[i + 2] - info.min) / (info.max - info.min));
+		info.vertices[i + 3] = ((info.vertices[i] - info.min.y) / (info.max.y - info.min.y));
+		info.vertices[i + 4] = ((info.vertices[i + 1] - info.min.y) / (info.max.y - info.min.y));
+		info.vertices[i + 5] = ((info.vertices[i + 2] - info.min.y) / (info.max.y - info.min.y));
+		info.vertices[i] -= info.center.x;
+		info.vertices[i + 1] -= info.center.y;
+		info.vertices[i + 2] -= info.center.z;
 	}
-	for (unsigned int i = 0; i < info.nbVertices * 6; i += 6)
-		printf("%f %f %f    %f %f %f\n", info.vertices[i], info.vertices[i + 1], info.vertices[i + 2], info.vertices[i + 3], info.vertices[i + 4], info.vertices[i + 5]);
+	//for (unsigned int i = 0; i < info.nbVertices * 6; i += 6)
+	//	printf("%f %f %f    %f %f %f\n", info.vertices[i], info.vertices[i + 1], info.vertices[i + 2], info.vertices[i + 3], info.vertices[i + 4], info.vertices[i + 5]);
 	close(fd);
 	sendOpenGL(&info, env);
 	free(info.vertices);
 	free(info.faces);
-	return (0);
+	env->info = info;
+	return (1);
 }

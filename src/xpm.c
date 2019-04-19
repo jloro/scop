@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 11:13:01 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/11 15:01:49 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/19 16:21:11 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,40 +15,23 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <stdio.h>
 
-void					clean(t_imgInfos *core)
-{
-	int					i;
-
-	i = 0;
-	while (i < core->nbColor)
-	{
-		printf("oui\n");
-		free(core->colors[i]);
-	}
-	free(core->colors);
-	i = 0;
-	while (i < core->nbColor)
-		free(core->ch[i]);
-	free(core->ch);
-}
-
-int						findIndex(char **tab, char toFindF, char toFindS, int len)
+int						find_index(char **tab, char to_find_f, char to_find_s,
+							int len)
 {
 	int					i;
 
 	i = 0;
 	while (i < len)
 	{
-		if (tab[i][0] == toFindF && tab[i][1] == toFindS)
-			return i;
+		if (tab[i][0] == to_find_f && tab[i][1] == to_find_s)
+			return (i);
 		i++;
 	}
-	return -1;
+	return (-1);
 }
 
-int						parseIMG(int fd, t_imgInfos * core)
+int						parse_img(int fd, t_img_infos *core)
 {
 	int					i;
 	char				*line;
@@ -62,25 +45,28 @@ int						parseIMG(int fd, t_imgInfos * core)
 		get_next_line(fd, &line);
 		while (j < core->width * 2)
 		{
-			index = findIndex(core->ch, line[j], line[j + 1], core->nbColor);
-			core->data[(i * core->width + ((j - 1) / 2)) * 3] = core->colors[index][0];
-			core->data[(i * core->width + ((j - 1) / 2)) * 3 + 1] = core->colors[index][1];
-			core->data[(i * core->width + ((j - 1) / 2)) * 3 + 2] = core->colors[index][2];
+			index = find_index(core->ch, line[j], line[j + 1], core->nb_color);
+			core->data[(i * core->width + ((j - 1) / 2)) * 3] =
+				core->colors[index][0];
+			core->data[(i * core->width + ((j - 1) / 2)) * 3 + 1] =
+				core->colors[index][1];
+			core->data[(i * core->width + ((j - 1) / 2)) * 3 + 2] =
+				core->colors[index][2];
 			j += 2;
 		}
 		free(line);
 		i++;
 	}
-	return 1;
+	return (1);
 }
 
-unsigned char *			parseHexaColor(char * hexa)
+unsigned char			*parse_hexa_color(char *hexa)
 {
-	unsigned char *	colors;
-	char		tmp[3];
+	unsigned char		*colors;
+	char				tmp[3];
 
 	if ((colors = (unsigned char *)malloc(sizeof(unsigned char) * 3)) == NULL)
-		return NULL;
+		return (NULL);
 	hexa++;
 	ft_strncpy(tmp, hexa, 2);
 	colors[0] = ft_itoa_dec(tmp, 16);
@@ -90,56 +76,60 @@ unsigned char *			parseHexaColor(char * hexa)
 	hexa += 2;
 	ft_strncpy(tmp, hexa, 2);
 	colors[2] = ft_itoa_dec(tmp, 16);
-	return colors;
+	return (colors);
 }
 
-int				parseColor(int fd, t_imgInfos *core)
+int						parse_color(int fd, t_img_infos *core)
 {
-	char			*line;
-	int				i;
+	char				*line;
+	int					i;
 
 	i = 0;
-	if ((core->colors = (unsigned char **)malloc(sizeof(unsigned char*) * core->nbColor)) == NULL)
-		return 0;
-	if ((core->ch = (char **)malloc(sizeof(char*) * core->nbColor)) == NULL)
-		return 0;
-	while (i < core->nbColor)
+	if ((core->colors = (unsigned char **)malloc(sizeof(unsigned char*)
+					* core->nb_color)) == NULL)
+		return (0);
+	if ((core->ch = (char **)malloc(sizeof(char*) * core->nb_color)) == NULL)
+		return (0);
+	while (i < core->nb_color)
 	{
 		get_next_line(fd, &line);
-		if ((core->ch[i] = (char *)malloc(sizeof(char) * core->nbChar + 1)) == NULL)
-			return 0;
-		ft_strncpy(core->ch[i], line + 1, core->nbChar);
-		core->ch[i][core->nbChar] = '\0';
-		if ((core->colors[i] = parseHexaColor(strstr(line, "c #") + 2)) == NULL)
-			return 0;
+		if ((core->ch[i] = (char *)malloc(sizeof(char) * core->nb_char + 1))
+				== NULL)
+			return (0);
+		ft_strncpy(core->ch[i], line + 1, core->nb_char);
+		core->ch[i][core->nb_char] = '\0';
+		if ((core->colors[i] = parse_hexa_color(strstr(line, "c #") + 2))
+				== NULL)
+			return (0);
 		i++;
 		free(line);
 	}
-	return 1;
+	return (1);
 }
 
-unsigned char	*loadXPM(const char * path, int * width, int * height)
+unsigned char			*loadxpm(const char *path, int *width, int *height)
 {
-	int				fd;
-	t_imgInfos		core;
-	char			*line;
+	int					fd;
+	t_img_infos			core;
+	char				*line;
 
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-		return NULL;
+	if ((fd = open(path, O_RDONLY)) == -1)
+		return (NULL);
 	get_next_line(fd, &line);
 	free(line);
 	get_next_line(fd, &line);
-	sscanf(line, "\"%d %d %d %d \",", &(core.width), &(core.height), &(core.nbColor), &(core.nbChar));
+	sscanf(line, "\"%d %d %d %d \",", &(core.width), &(core.height),
+			&(core.nb_color), &(core.nb_char));
 	free(line);
-	core.data = (unsigned char *)malloc(sizeof(unsigned char) * 3 * core.width * core.height);
+	if ((core.data = (unsigned char *)malloc(sizeof(unsigned char) * 3
+					* core.width * core.height)) == NULL)
+		return (0);
 	*width = core.width;
 	*height = core.height;
-	printf("w: %d h: %d col:%d ch: %d\n", core.width, core.height, core.nbColor, core.nbChar);
-	parseColor(fd, &core);
-	parseIMG(fd, &core);
+	parse_color(fd, &core);
+	parse_img(fd, &core);
 	close(fd);
-	//KC
-	//clean(&core);
-	return core.data;
+	ft_2tabdel((void**)core.colors, core.nb_color);
+	ft_2tabdel((void**)core.ch, core.nb_color);
+	return (core.data);
 }

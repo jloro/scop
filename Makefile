@@ -7,7 +7,7 @@ EXEC_NAME = scop
 SRC_FILES = main.c \
 			glad.c \
 			xpm.c \
-			initGlfw.c \
+			init.c \
 			callback.c \
 			init_mat.c \
 			parsing.c \

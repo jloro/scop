@@ -4,11 +4,16 @@ layout (location = 1) in vec3 aCol;
 
 uniform mat4 vp;
 uniform mat4 model;
+uniform int texOn;
 
 smooth out vec3 color;
+flat out int tex;
+out vec3 pos;
 
 void main()
 {
 	gl_Position = vp * model * vec4(aPos, 1.0);
 	color = aCol;
+	tex = texOn;
+	pos = aPos;
 }
