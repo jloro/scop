@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:10:53 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/17 13:26:40 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/19 17:06:11 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,45 @@
 #include <unistd.h>
 #include "libft.h"
 
-int	createShader(GLuint *shader, GLenum shaderType, const char * source)
+int			create_program(t_env *env, GLuint shader[2])
 {
-	int success;
-	char infoLog[512];
+	int		success;
+	char	infolog[512];
 
-	*shader = glCreateShader(shaderType);
-	glShaderSource(*shader, 1, &source, NULL);
-	glCompileShader(*shader);
-	glGetShaderiv(*shader, GL_COMPILE_STATUS, &success);
+	env->shader_program = glCreateProgram();
+	glAttachShader(env->shader_program, shader[0]);
+	glAttachShader(env->shader_program, shader[1]);
+	glLinkProgram(env->shader_program);
+	glGetProgramiv(env->shader_program, GL_LINK_STATUS, &success);
 	if (!success)
 	{
-		glGetShaderInfoLog(*shader, 512, NULL, infoLog);
-		ft_putstr("ERROR::SHADER::COMPILATION_FAILED::");
-		ft_putendl(infoLog);
+		glGetProgramInfoLog(env->shader_program, 512, NULL, infolog);
+		printf("ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n%s", infolog);
 		return (0);
 	}
 	return (1);
 }
 
-char *			readShader(char *file)
+int			create_shader(GLuint *shader, GLenum shader_type,
+				const char *source)
+{
+	int		success;
+	char	infolog[512];
+
+	*shader = glCreateShader(shader_type);
+	glShaderSource(*shader, 1, &source, NULL);
+	glCompileShader(*shader);
+	glGetShaderiv(*shader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(*shader, 512, NULL, infolog);
+		printf("ERROR::SHADER::COMPILATION_FAILED::%s \n", infolog);
+		return (0);
+	}
+	return (1);
+}
+
+char		*read_shader(char *file)
 {
 	int		fd;
 	int		len;
@@ -49,7 +68,8 @@ char *			readShader(char *file)
 	lseek(fd, 0, SEEK_SET);
 	if ((line = (char *)malloc(sizeof(char) * (len + 1))) == NULL)
 		return (NULL);
-	read(fd, line, len);
+	if (read(fd, line, len) == -1)
+		return (0);
 	line[len] = '\0';
 	return (line);
 }
@@ -58,35 +78,23 @@ char *			readShader(char *file)
 ** 1 = vertexShader, 2 = fragmentShader
 */
 
-int			compileShader(t_env *env)
+int			compile_shader(t_env *env)
 {
 	GLuint	shader[2];
-	char	*shaderSource[2];
-	int		success;
-	char	infoLog[512];
+	char	*shader_source[2];
 
 	ft_putendl("Compile Shader");
-	if ((shaderSource[0] = readShader("shaders/vertexShader.glsl")) == NULL)
+	if ((shader_source[0] = read_shader("shaders/vertexShader.glsl")) == NULL)
 		return (0);
-	if ((shaderSource[1] = readShader("shaders/fragShader.glsl")) == NULL)
+	if ((shader_source[1] = read_shader("shaders/fragShader.glsl")) == NULL)
 		return (0);
-	createShader(&(shader[0]), GL_VERTEX_SHADER, shaderSource[0]);
-	createShader(&(shader[1]), GL_FRAGMENT_SHADER, shaderSource[1]);
-	env->shaderProgram = glCreateProgram();
-	glAttachShader(env->shaderProgram, shader[0]);
-	glAttachShader(env->shaderProgram, shader[1]);
-	glLinkProgram(env->shaderProgram);
-	glGetProgramiv(env->shaderProgram, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(env->shaderProgram, 512, NULL, infoLog);
-		printf("ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n%s", infoLog);
-		return (0);
-	}
+	create_shader(&(shader[0]), GL_VERTEX_SHADER, shader_source[0]);
+	create_shader(&(shader[1]), GL_FRAGMENT_SHADER, shader_source[1]);
+	create_program(env, shader);
 	glDeleteShader(shader[0]);
 	glDeleteShader(shader[1]);
-	free(shaderSource[0]);
-	free(shaderSource[1]);
+	free(shader_source[0]);
+	free(shader_source[1]);
 	ft_putendl("Finish");
 	return (1);
 }

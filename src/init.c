@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 11:57:29 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/19 16:12:20 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/19 16:57:30 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "libft.h"
 #include "xpm.h"
 
-int		init_texture(t_env *env)
+int					init_texture(t_env *env)
 {
 	unsigned char	*data;
 	int				w;
@@ -27,11 +27,13 @@ int		init_texture(t_env *env)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	ft_putendl("Start load texture");
 	if ((data = loadxpm("cat.xpm", &w, &h)) == NULL)
 	{
 		ft_putendl("Error while loading texture");
 		return (0);
 	}
+	ft_putendl("Finish");
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
 			data);
 	glGenerateMipmap(GL_TEXTURE_2D);
@@ -39,7 +41,7 @@ int		init_texture(t_env *env)
 	return (1);
 }
 
-int		initGlfw(t_env *env)
+int					initglfw(t_env *env)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -62,12 +64,10 @@ int		initGlfw(t_env *env)
 		return (0);
 	}
 	glfwSetFramebufferSizeCallback(env->window, resize_callback);
-	if (!init_texture(env))
-		return (0);
 	return (1);
 }
 
-void	init_keys(t_env *env)
+void				init_keys(t_env *env)
 {
 	env->keys.polygon.active = 0;
 	env->keys.polygon.key = 0;
@@ -87,4 +87,15 @@ void	init_keys(t_env *env)
 	env->keys.decrease_speed.active = 0;
 	env->rotate = vec3_set(0.0f, 1.0f, 0.0f);
 	env->rotate_speed = 0.5f;
+}
+
+int					init(t_env *env)
+{
+	init_keys(env);
+	if (!initglfw(env) || !init_texture(env))
+		return (0);
+	send_opengl(&env->info, env);
+	free(env->info.vertices);
+	free(env->info.faces);
+	return (1);
 }

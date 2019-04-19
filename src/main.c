@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/19 15:14:05 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/19 16:57:10 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,24 +50,24 @@ int			loop(t_env *env)
 
 		if (env->keys.move.active && !vec3_is_null(env->rotate))
 			rotate(env);
-		glUseProgram(env->shaderProgram);
+		glUseProgram(env->shader_program);
 
 		glBindTexture(GL_TEXTURE_2D, env->texture);
 
-		glUniformMatrix4fv(env->vpLoc, 1, GL_FALSE, env->vp.m);
-		glUniformMatrix4fv(env->modelLoc, 1, GL_TRUE, env->model.m);
+		glUniformMatrix4fv(env->vp_loc, 1, GL_FALSE, env->vp.m);
+		glUniformMatrix4fv(env->model_loc, 1, GL_TRUE, env->model.m);
 
-		glUniform1i(env->texLoc, env->keys.texture.active);
+		glUniform1i(env->tex_loc, env->keys.texture.active);
 
-		glBindVertexArray(env->VAO);
-		glDrawElements(GL_TRIANGLES, env->info.nbFace * 3, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(env->vao);
+		glDrawElements(GL_TRIANGLES, env->info.nb_face * 3, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(env->window);
 		glfwPollEvents();
 	}
-	glDeleteVertexArrays(1, &env->VAO);
-	glDeleteBuffers(1, &env->VBO);
-	glDeleteBuffers(1, &env->EBO);
+	glDeleteVertexArrays(1, &env->vao);
+	glDeleteBuffers(1, &env->vbo);
+	glDeleteBuffers(1, &env->ebo);
 	glfwTerminate();
 	ft_putendl("end loop");
 	return (1);
@@ -82,12 +82,11 @@ int			main(int argc, char **argv)
 		ft_putendl("Usage: ./scop file");
 		return (0);
 	}
-	init_keys(&env);
-	if (!initGlfw(&env))
-		return (0);
 	if (!parse(&env, argv[1]))
 		return (0);
-	if (!compileShader(&env))
+	if (!init(&env))
+		return (0);
+	if (!compile_shader(&env))
 		return (0);
 	init_mat(&env);
 	loop(&env);

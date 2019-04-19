@@ -6,12 +6,12 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:32:44 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/19 15:11:31 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/19 16:56:57 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SCOPE_H
-# define SCOPE_H
+#ifndef SCOP_H
+# define SCOP_H
 
 # include <GLFW/glfw3.h>
 # include "libmat.h"
@@ -32,9 +32,9 @@ typedef struct		s_key
 typedef struct		s_parse
 {
 	GLfloat			*vertices;
-	unsigned int	nbVertices;
+	unsigned int	nb_vertices;
 	GLuint			*faces;
-	unsigned int	nbFace;
+	unsigned int	nb_face;
 	t_vec3			center;
 	t_vec3			min;
 	t_vec3			max;
@@ -56,16 +56,16 @@ typedef struct		s_key_list
 typedef struct		s_env
 {
 	GLFWwindow		*window;
-	GLuint			shaderProgram;
-	GLuint			VAO;
-	GLuint			VBO;
-	GLuint			EBO;
+	GLuint			shader_program;
+	GLuint			vao;
+	GLuint			vbo;
+	GLuint			ebo;
 	t_mat4			vp;
 	t_mat4			model;
-	GLint			vpLoc;
-	GLint			modelLoc;
-	GLint			transformLoc;
-	GLint			texLoc;
+	GLint			vp_loc;
+	GLint			model_loc;
+	GLint			transform_loc;
+	GLint			tex_loc;
 	t_parse			info;
 	t_key_list		keys;
 	t_vec3			rotate;
@@ -73,12 +73,13 @@ typedef struct		s_env
 	float			rotate_speed;
 }					t_env;
 
-
-void				resize_callback(GLFWwindow* window, int width, int height);
-int					initGlfw(t_env *env);
+void				resize_callback(GLFWwindow *window, int width, int height);
+int					init(t_env *env);
 void				init_mat(t_env *env);
 int					parse(t_env *env, char *file);
-int					compileShader(t_env *env);
+int					compile_shader(t_env *env);
 void				key(GLFWwindow *window, t_env *env);
 void				init_keys(t_env *env);
+int					send_opengl(t_parse *info, t_env *env);
+
 #endif
