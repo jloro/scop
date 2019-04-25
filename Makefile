@@ -1,5 +1,5 @@
 CC = gcc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -Wno-deprecated-declarations
 GLFLAGS = -framework CoreVideo -framework OpenGL -framework IOKit -framework AppKit
 LIBFLAGS = -lglfw3 -lft -lmat
 

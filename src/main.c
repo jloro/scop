@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/19 16:57:10 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/25 11:49:28 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int			loop(t_env *env)
 
 		glUniformMatrix4fv(env->vp_loc, 1, GL_FALSE, env->vp.m);
 		glUniformMatrix4fv(env->model_loc, 1, GL_TRUE, env->model.m);
+		glUniform1i(env->flat_loc, env->keys.flat.active);
 
 		glUniform1i(env->tex_loc, env->keys.texture.active);
 

@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:46:10 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/19 16:57:48 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/25 11:48:36 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void key(GLFWwindow *window, t_env *env)
 	key_once(window, &env->keys.polygon, GLFW_KEY_P);
 	key_once(window, &env->keys.move, GLFW_KEY_M);
 	key_once(window, &env->keys.texture, GLFW_KEY_T);
+	key_once(window, &env->keys.flat, GLFW_KEY_F);
 	change_rotate(window, env);
 	shader(window, env);
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
