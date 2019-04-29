@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:32:44 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 16:58:46 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/29 17:19:56 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 # define WIDTH_SCREEN 1000.0f
 # define HEIGHT_SCREEN 1000.0f
-# define F_PLANE 1000.0f
+# define F_PLANE 100000.0f
 # define N_PLANE 0.1f
 # define FOV 90.0f
 

@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 17:15:13 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/29 17:26:18 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,7 @@ int			main(int argc, char **argv)
 		return (0);
 	}
 	if (!parse(&env, argv[1]) || !init(&env) || !compile_shader(&env))
-	{
-		while (1)
-			;
 		return (0);
-	}
 	init_mat(&env);
 	loop(&env);
 	return (1);
