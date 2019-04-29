@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 15:04:36 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 16:29:57 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/29 16:44:06 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,9 +170,9 @@ int			parse(t_env *env, char *file)
 	info.center = vec3_mulf(vec3_add(info.max, info.min), 0.5f);
 	for (unsigned int i = 0; i < info.nb_vertices * 6; i += 6)
 	{
-		info.vertices[i + 3] = ((info.vertices[i] - info.min.y) / (info.max.y - info.min.y));
+		info.vertices[i + 3] = ((info.vertices[i] - info.min.x) / (info.max.x - info.min.x));
 		info.vertices[i + 4] = ((info.vertices[i + 1] - info.min.y) / (info.max.y - info.min.y));
-		info.vertices[i + 5] = ((info.vertices[i + 2] - info.min.y) / (info.max.y - info.min.y));
+		info.vertices[i + 5] = ((info.vertices[i + 2] - info.min.z) / (info.max.z - info.min.z));
 		info.vertices[i] -= info.center.x;
 		info.vertices[i + 1] -= info.center.y;
 		info.vertices[i + 2] -= info.center.z;

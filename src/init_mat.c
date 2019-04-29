@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:46:51 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/25 11:47:53 by jules            ###   ########.fr       */
+/*   Updated: 2019/04/29 16:37:51 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ t_mat4		mat4_proj(void)
 	t = tan(degtorad(FOV) / 2) * N_PLANE;
 	r = t * (WIDTH_SCREEN / HEIGHT_SCREEN);
 	ret = mat4_set(0.0f, 0);
-	ret.m[0] = 1 / r;
-	ret.m[5] = 1 / t;
+	ret.m[0] = N_PLANE / r;
+	ret.m[5] = N_PLANE / t;
 	ret.m[10] = -(F_PLANE + N_PLANE) / (F_PLANE - N_PLANE);
 	ret.m[14] = -(2 * F_PLANE * N_PLANE) / (F_PLANE - N_PLANE);
 	ret.m[11] = -1;

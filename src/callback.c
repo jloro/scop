@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:46:10 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 14:20:23 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/29 17:17:58 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,21 @@ void	change_rotate(GLFWwindow *window, t_env *env)
 {
 	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS && env->keys.x.key)
 	{
-		env->rotate = vec3_set(1.0f, 0.0f, 0.0f);
+		env->rotate.x = env->rotate.x == 0.0f ? 1.0f : 0.0f;
 		env->keys.x.key = 0;
 	}
 	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_RELEASE && !env->keys.x.key)
 		env->keys.x.key = 1;
 	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS && env->keys.y.key)
 	{
-		env->rotate = vec3_set(0.0f, 1.0f, 0.0f);
+		env->rotate.y = env->rotate.y == 0.0f ? 1.0f : 0.0f;
 		env->keys.y.key = 0;
 	}
 	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_RELEASE && !env->keys.y.key)
 		env->keys.y.key = 1;
 	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && env->keys.z.key)
 	{
-		env->rotate = vec3_set(0.0f, 0.0f, 1.0f);
+		env->rotate.z = env->rotate.z == 0.0f ? 1.0f : 0.0f;
 		env->keys.z.key = 0;
 	}
 	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_RELEASE && !env->keys.z.key)

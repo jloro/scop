@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 16:32:52 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/29 17:15:13 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void		rotate(t_env *env)
 	env->model.m[3] = 0;
 	env->model.m[7] = 0;
 	env->model.m[11] = 0;
-	env->model = mat4_rot(env->model, degtorad(env->rotate_speed), env->rotate);
+	env->model = mat4_rot(env->model, degtorad(env->rotate_speed), vec3_normalize(env->rotate));
 	env->model.m[3] = tmp.m[3];
 	env->model.m[7] = tmp.m[7];
 	env->model.m[11] = tmp.m[11];
