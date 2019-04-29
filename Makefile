@@ -1,5 +1,5 @@
 CC = gcc
-FLAGS = -Wall -Wextra -Werror -Wno-deprecated-declarations
+FLAGS = -Wall -Wextra -Werror
 GLFLAGS = -framework CoreVideo -framework OpenGL -framework IOKit -framework AppKit
 LIBFLAGS = -lglfw3 -lft -lmat
 
@@ -18,7 +18,7 @@ OBJ_FILES = $(SRC_FILES:.c=.o)
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 LIB_PATH = ./lib/
-INC_PATH = ./inc/ $(LIB_PATH)glfw/include/ $(LIB_PATH)libft/ $(LIB_PATH)libmat/inc
+INC_PATH = ./inc/ $(LIB_PATH)glfw/include/ $(LIB_PATH)libft/ $(LIB_PATH)libmat/inc 
 
 LIBS = libmat libft glfw/build/src
 

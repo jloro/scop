@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:32:44 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/25 11:43:05 by jules            ###   ########.fr       */
+/*   Updated: 2019/04/29 16:28:14 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@
 
 # define WIDTH_SCREEN 1000.0f
 # define HEIGHT_SCREEN 1000.0f
-# define F_PLANE 1000.0f
+# define F_PLANE 100000.0f
 # define N_PLANE 0.1f
 # define FOV 90.0f
-# define MOVE_SPEED 0.25f
 
 typedef struct		s_key
 {
@@ -49,9 +48,11 @@ typedef struct		s_key_list
 	t_key			move;
 	t_key			shader;
 	t_key			texture;
-	t_key			increase_speed;
-	t_key			decrease_speed;
-    t_key           flat;
+	t_key			increase_rot_speed;
+	t_key			decrease_rot_speed;
+	t_key			increase_move_speed;
+	t_key			decrease_move_speed;
+	t_key			flat;
 }					t_key_list;
 
 typedef struct		s_env
@@ -73,6 +74,7 @@ typedef struct		s_env
 	t_vec3			rotate;
 	GLuint			texture;
 	float			rotate_speed;
+	float			move_speed;
 }					t_env;
 
 void				resize_callback(GLFWwindow *window, int width, int height);

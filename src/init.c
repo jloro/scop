@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 11:57:29 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/25 11:42:50 by jules            ###   ########.fr       */
+/*   Updated: 2019/04/29 14:18:21 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int					init_texture(t_env *env)
 	if ((data = loadxpm("cat.xpm", &w, &h)) == NULL)
 	{
 		ft_putendl("Error while loading texture");
+		glfwTerminate();
 		return (0);
 	}
 	ft_putendl("Finish");
@@ -83,12 +84,15 @@ void				init_keys(t_env *env)
 	env->keys.z.active = 0;
 	env->keys.texture.key = 0;
 	env->keys.texture.active = 0;
-	env->keys.increase_speed.key = 0;
-	env->keys.decrease_speed.active = 0;
+	env->keys.increase_rot_speed.key = 0;
+	env->keys.decrease_rot_speed.active = 0;
+	env->keys.increase_move_speed.key = 0;
+	env->keys.decrease_move_speed.active = 0;
 	env->keys.flat.key = 0;
 	env->keys.flat.active = 0;
 	env->rotate = vec3_set(0.0f, 1.0f, 0.0f);
 	env->rotate_speed = 0.5f;
+	env->move_speed = 0.25f;
 }
 
 int					init(t_env *env)

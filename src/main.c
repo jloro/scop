@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/25 11:49:28 by jules            ###   ########.fr       */
+/*   Updated: 2019/04/29 16:32:52 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,12 @@ int			main(int argc, char **argv)
 		ft_putendl("Usage: ./scop file");
 		return (0);
 	}
-	if (!parse(&env, argv[1]))
+	if (!parse(&env, argv[1]) || !init(&env) || !compile_shader(&env))
+	{
+		while (1)
+			;
 		return (0);
-	if (!init(&env))
-		return (0);
-	if (!compile_shader(&env))
-		return (0);
+	}
 	init_mat(&env);
 	loop(&env);
 	return (1);

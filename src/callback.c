@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:46:10 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/25 11:48:36 by jules            ###   ########.fr       */
+/*   Updated: 2019/04/29 14:20:23 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,36 @@ void	change_rotate(GLFWwindow *window, t_env *env)
 	}
 	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_RELEASE && !env->keys.z.key)
 		env->keys.z.key = 1;
-	if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS && env->keys.decrease_speed.key)
+	if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS && env->keys.decrease_rot_speed.key)
 	{
 		env->rotate_speed -= 0.5;
-		env->keys.decrease_speed.key = 0;
+		env->keys.decrease_rot_speed.key = 0;
 	}
-	if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_RELEASE && !env->keys.decrease_speed.key)
-		env->keys.decrease_speed.key = 1;
+	if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_RELEASE && !env->keys.decrease_rot_speed.key)
+		env->keys.decrease_rot_speed.key = 1;
 
-	if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS && env->keys.increase_speed.key)
+	if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS && env->keys.increase_rot_speed.key)
 	{
 		env->rotate_speed += 0.5;
-		env->keys.increase_speed.key = 0;
+		env->keys.increase_rot_speed.key = 0;
 	}
-	if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_RELEASE && !env->keys.increase_speed.key)
-		env->keys.increase_speed.key = 1;
+	if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_RELEASE && !env->keys.increase_rot_speed.key)
+		env->keys.increase_rot_speed.key = 1;
+	if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS && env->keys.decrease_move_speed.key)
+	{
+		env->move_speed = env->move_speed == 0.25f ? env->move_speed : env->move_speed / 2;
+		env->keys.decrease_move_speed.key = 0;
+	}
+	if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_RELEASE && !env->keys.decrease_move_speed.key)
+		env->keys.decrease_move_speed.key = 1;
+
+	if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS && env->keys.increase_move_speed.key)
+	{
+		env->move_speed *= 2;
+		env->keys.increase_move_speed.key = 0;
+	}
+	if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_RELEASE && !env->keys.increase_move_speed.key)
+		env->keys.increase_move_speed.key = 1;
 }
 
 void key(GLFWwindow *window, t_env *env)
@@ -91,17 +106,17 @@ void key(GLFWwindow *window, t_env *env)
 	change_rotate(window, env);
 	shader(window, env);
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		env->model = mat4_trans(env->model, 0.0f, MOVE_SPEED, 0.0f);
+		env->model = mat4_trans(env->model, vec3_set(0.0f, env->move_speed, 0.0f));
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		env->model = mat4_trans(env->model, 0.0f, -MOVE_SPEED, 0.0f);
+		env->model = mat4_trans(env->model, vec3_set(0.0f, -env->move_speed, 0.0f));
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		env->model = mat4_trans(env->model, -MOVE_SPEED, 0.0f, 0.0f);
+		env->model = mat4_trans(env->model, vec3_set(-env->move_speed, 0.0f, 0.0f));
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		env->model = mat4_trans(env->model, MOVE_SPEED, 0.0f, 0.0f);
+		env->model = mat4_trans(env->model, vec3_set(env->move_speed, 0.0f, 0.0f));
 	if (glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
-		env->model = mat4_trans(env->model, 0.0f, 0.0f, -MOVE_SPEED);
+		env->model = mat4_trans(env->model, vec3_set(0.0f, 0.0f, -env->move_speed));
 	if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
-		env->model = mat4_trans(env->model, 0.0f, 0.0f, MOVE_SPEED);
+		env->model = mat4_trans(env->model, vec3_set(0.0f, 0.0f, env->move_speed));
 	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
 		env->model = mat4_set(1.0f, 1);
 }

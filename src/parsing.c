@@ -6,12 +6,13 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 15:04:36 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/19 16:58:27 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/29 16:29:57 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "glad.h"
 #include "libft.h"
+#include "libmat.h"
 #include "scop.h"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -23,12 +24,12 @@
 
 void		calc_max_min(t_parse *info, GLfloat *tmp)
 {
-	info->min.x = info->min.x < tmp[info->nb_vertices * 6 - 6] ? info->min.x : tmp[info->nb_vertices * 6 - 6];
-	info->max.x = info->max.x > tmp[info->nb_vertices * 6 - 6] ? info->max.x : tmp[info->nb_vertices * 6 - 6];
-	info->min.y = info->min.y < tmp[info->nb_vertices * 6 - 5] ? info->min.y : tmp[info->nb_vertices * 6 - 5];
-	info->max.y = info->max.y > tmp[info->nb_vertices * 6 - 5] ? info->max.y : tmp[info->nb_vertices * 6 - 5];
-	info->min.z = info->min.z < tmp[info->nb_vertices * 6 - 4] ? info->min.z : tmp[info->nb_vertices * 6 - 4];
-	info->max.z = info->max.z > tmp[info->nb_vertices * 6 - 4] ? info->max.z : tmp[info->nb_vertices * 6 - 4];
+	info->min.x = minf(info->min.x, tmp[info->nb_vertices * 6 - 6]);
+	info->max.x = maxf(info->max.x, tmp[info->nb_vertices * 6 - 6]);
+	info->min.y = minf(info->min.y, tmp[info->nb_vertices * 6 - 5]);
+	info->max.y = maxf(info->max.y, tmp[info->nb_vertices * 6 - 5]);
+	info->min.z = minf(info->min.z, tmp[info->nb_vertices * 6 - 4]);
+	info->max.z = maxf(info->max.z, tmp[info->nb_vertices * 6 - 4]);
 }
 
 int			send_opengl(t_parse *info, t_env *env)
@@ -81,10 +82,10 @@ int			addVertice(char *line, t_parse *info)
 	return (1);
 }
 
-int			addFace(char *line, t_parse *info, int double_face)
+int			addFace(char *line, t_parse *info, int double_face, int slash)
 {
 	GLuint	*tmp;
-	GLuint	tmp2;
+	GLuint	tmp2[9];
 	unsigned int	i;
 
 	i = -1;
@@ -94,22 +95,28 @@ int			addFace(char *line, t_parse *info, int double_face)
 	while (++i < (info->nb_face - 1) * 3)
 		tmp[i] = info->faces[i];
 	free(info->faces);
-	if (double_face == 3 && !sscanf(line, "f %u %u %u",
+	if (slash == 0 && double_face == 3 && !sscanf(line, "f %u %u %u",
 				&tmp[info->nb_face * 3 - 3], &tmp[info->nb_face * 3 - 2]
 				, &tmp[info->nb_face * 3 - 1]))
 		return (0);
-	else if (double_face == 4 && !sscanf(line, "f %u %u %u %u", &tmp[info->nb_face * 3 - 3],
-				&tmp[info->nb_face * 3 - 2], &tmp[info->nb_face * 3 - 1], &tmp2))
+	else if (slash == 0 && double_face == 4 && !sscanf(line, "f %u %u %u %u", &tmp[info->nb_face * 3 - 3],
+				&tmp[info->nb_face * 3 - 2], &tmp[info->nb_face * 3 - 1], &tmp2[0]))
 		return (0);
-	else if (double_face == 0 && !sscanf(line, "f %u %u %u %u", &tmp[info->nb_face * 3 - 3], &tmp2, 
+	else if (slash == 0 && double_face == 0 && !sscanf(line, "f %u %u %u %u", &tmp[info->nb_face * 3 - 3], &tmp2[0], 
 				&tmp[info->nb_face * 3 - 2], &tmp[info->nb_face * 3 - 1]))
+		return (0);
+	if (slash == 3 && !sscanf(line, "f %u/%u %u/%u %u/%u", &tmp[info->nb_face * 3 - 3], &tmp2[0], 
+				&tmp[info->nb_face * 3 - 2], &tmp2[1], &tmp[info->nb_face * 3 - 1], &tmp2[2]))
+		return (0);
+	else if (slash == 6 && !sscanf(line, "f %u/%u/%u %u/%u/%u %u/%u/%u", &tmp[info->nb_face * 3 - 3], &tmp2[0], &tmp2[1], 
+				&tmp[info->nb_face * 3 - 2], &tmp2[2], &tmp2[3], &tmp[info->nb_face * 3 - 1], &tmp2[4], &tmp2[5]))
 		return (0);
 	tmp[info->nb_face * 3 - 3]--;
 	tmp[info->nb_face * 3 - 2]--;
 	tmp[info->nb_face * 3 - 1]--;
 	info->faces = tmp;
-	if (double_face == 4)
-		addFace(line, info, 0);
+	if (double_face == 4 && slash == 0)
+		addFace(line, info, 0, slash);
 	return (1);
 }
 
@@ -122,9 +129,15 @@ int			get(int fd, t_parse *info)
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
 		if (line[0] == 'v' && line[1] == ' ')
-			addVertice(line, info);
+		{
+			if (!addVertice(line, info))
+				return (0);
+		}
 		else if (line[0] == 'f')
-			addFace(line, info, ft_compte_c(line, ' '));
+		{
+			if (!addFace(line, info, ft_compte_c(line, ' '), ft_compte_c(line, '/')))
+				return (0);
+		}
 		free(line);
 	}
 	if (ret == -1)
@@ -150,12 +163,8 @@ int			parse(t_env *env, char *file)
 	info.nb_vertices = 0;
 	info.vertices = (GLfloat*)malloc(sizeof(GLfloat) * info.nb_vertices);
 	info.faces = (GLuint*)malloc(sizeof(GLuint) * info.nb_face);
-	info.max.y = 0;
-	info.min.y = 0;
-	info.max.x = 0;
-	info.min.x = 0;
-	info.max.z = 0;
-	info.min.z = 0;
+	info.max = vec3_set(0, 0, 0);
+	info.min = vec3_set(0, 0, 0);
 	if (!get(fd, &info))
 		return (0);
 	info.center = vec3_mulf(vec3_add(info.max, info.min), 0.5f);
