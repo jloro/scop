@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:32:44 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 17:19:56 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/29 18:03:10 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,9 @@ int					compile_shader(t_env *env);
 void				key(GLFWwindow *window, t_env *env);
 void				init_keys(t_env *env);
 int					send_opengl(t_parse *info, t_env *env);
+void				calc_max_min(t_parse *info, GLfloat *tmp);
+int					send_opengl(t_parse *info, t_env *env);
+int					add_face_if(int select[2], char *line, t_parse *info,
+						GLuint *tmp);
 
 #endif
