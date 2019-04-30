@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:46:51 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 14:58:13 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 15:51:55 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ void		init_mat(t_env *env)
 	view = mat4_set(1.0f, 1);
 	env->model = mat4_set(1.0f, 1);
 	view = mat4_look_at(vec3_set(0.0f, 1.0f, 0.0f), vec3_set(0.0f, 0.0f, 0.0f),
-			vec3_set(0.0f, 0.0f, 3.0f));
+			vec3_set(0.0f, 0.0f, 3.0f + (env->info.max.z - env->info.min.z) +
+			(env->info.max.x - env->info.min.x)));
 	env->vp = mat4_mul(view, proj);
 	env->vp_loc = glGetUniformLocation(env->shader_program, "vp");
 	env->model_loc = glGetUniformLocation(env->shader_program, "model");
