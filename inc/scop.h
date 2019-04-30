@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:32:44 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 11:56:07 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 13:40:31 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ typedef struct		s_env
 	int				width;
 }					t_env;
 
-void				resize_callback(GLFWwindow *window, t_env *env);
+void				resize_callback(GLFWwindow *window, int width, int height);
 int					init(t_env *env);
 void				init_mat(t_env *env);
 int					parse(t_env *env, char *file);

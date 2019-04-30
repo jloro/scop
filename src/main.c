@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 12:28:25 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 13:41:10 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int			loop(t_env *env)
 	glEnable(GL_DEPTH_TEST);
 	while (!glfwWindowShouldClose(env->window))
 	{
-		resize_callback(env->window, env);
 		key(env->window, env);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);

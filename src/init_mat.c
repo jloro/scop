@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:46:51 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 11:55:12 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 13:39:06 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,4 @@ void		init_mat(t_env *env)
 	env->model_loc = glGetUniformLocation(env->shader_program, "model");
 	env->tex_loc = glGetUniformLocation(env->shader_program, "texOn");
 	env->flat_loc = glGetUniformLocation(env->shader_program, "f");
-}
-
-void		refresh(t_env *env)
-{
-	t_mat4	proj;
-	t_mat4	view;
-
-	proj = mat4_proj(*env);
-	view = mat4_set(1.0f, 1);
-	view = mat4_look_at(vec3_set(0.0f, 1.0f, 0.0f), vec3_set(0.0f, 0.0f, 0.0f),
-			vec3_set(0.0f, 0.0f, 3.0f));
-	env->vp = mat4_mul(view, proj);
 }

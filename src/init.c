@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 11:57:29 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 13:32:14 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 13:40:52 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int					initglfw(t_env *env)
 		glfwTerminate();
 		return (0);
 	}
+	glfwSetFramebufferSizeCallback(env->window, resize_callback);
 	return (1);
 }
 
