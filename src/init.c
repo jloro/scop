@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 11:57:29 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 12:26:45 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 12:40:17 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int					init_texture(t_env *env)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if ((data = loadxpm("bongo-cat.xpm", &w, &h)) == NULL)
+	if ((data = loadxpm("ressource/texture/cat.xpm", &w, &h)) == NULL)
 	{
 		ft_putendl("Error while loading texture");
 		glfwTerminate();
