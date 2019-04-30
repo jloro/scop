@@ -20,7 +20,7 @@ OBJ_FILES = $(SRC_FILES:.c=.o)
 SRC_PATH = ./src/
 OBJ_PATH = ./obj/
 LIB_PATH = ./lib/
-INC_PATH = ./inc/ $(LIB_PATH)glfw/include/ $(LIB_PATH)libft/ $(LIB_PATH)libmat/inc $(LIB_PATH)/glad
+INC_PATH = ./inc/ $(LIB_PATH)glfw/include/ $(LIB_PATH)libft/inc $(LIB_PATH)libmat/inc $(LIB_PATH)/glad
 
 LIBS = libmat libft glfw/build/src
 
@@ -34,7 +34,9 @@ LIB = $(addprefix -L$(LIB_PATH),$(LIBS))
 all : $(EXEC_NAME)
 
 $(EXEC_NAME) : $(OBJS)
+	@echo "=== Compiling libft ==="
 	@make -C $(LIB_PATH)libft
+	@echo "=== Compiling libmat ==="
 	@make -C $(LIB_PATH)libmat
 	@$(CC) $(FLAGS) $(LIB) $(LIBFLAGS) $(GLFLAGS) $(LIB_GLAD) -o $(EXEC_NAME) $(OBJS)
 	@echo "$(EXEC_NAME) compiled ✓"

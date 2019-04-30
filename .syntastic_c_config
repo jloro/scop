@@ -1,5 +1,5 @@
 -I lib/libmat/inc
--I lib/libft
+-I lib/libft/inc
 -I inc/
 -I lib/glfw/include
 -I lib/glad/
