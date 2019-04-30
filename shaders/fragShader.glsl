@@ -1,4 +1,4 @@
-#version 400 core
+#version 410 core
 out vec4 FragColor;
 
 smooth in vec3 s_color;

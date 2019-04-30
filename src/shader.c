@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:10:53 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 12:26:34 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 13:33:38 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void		shader(GLFWwindow *window, t_env *env)
 {
 	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS && env->keys.shader.key)
 	{
+		printf("Compile shader.\n");
 		compile_shader(env);
+		printf("Done.\n");
 		env->keys.shader.key = 0;
 	}
 	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_RELEASE && !env->keys.shader.key)
