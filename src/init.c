@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 11:57:29 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 13:40:52 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 14:57:19 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ void				init_keys(t_env *env)
 	env->keys.decrease_move_speed.active = 0;
 	env->keys.flat.key = 0;
 	env->keys.flat.active = 0;
+	env->keys.grey.key = 0;
+	env->keys.grey.active = 0;
 	env->rotate = vec3_set(0.0f, 1.0f, 0.0f);
 	env->rotate_speed = 0.5f;
 	env->move_speed = 0.25f;

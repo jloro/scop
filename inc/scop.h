@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:32:44 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 13:40:31 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 14:58:25 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct		s_key_list
 	t_key			increase_move_speed;
 	t_key			decrease_move_speed;
 	t_key			flat;
+	t_key			grey;
 }					t_key_list;
 
 typedef struct		s_env
@@ -69,6 +70,7 @@ typedef struct		s_env
 	GLint			transform_loc;
 	GLint			tex_loc;
 	GLint			flat_loc;
+	GLint			grey_loc;
 	t_parse			info;
 	t_key_list		keys;
 	t_vec3			rotate;

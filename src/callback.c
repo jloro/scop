@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:46:10 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 11:57:38 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 14:57:37 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	key(GLFWwindow *window, t_env *env)
 	key_once(window, &env->keys.move, GLFW_KEY_M);
 	key_once(window, &env->keys.texture, GLFW_KEY_T);
 	key_once(window, &env->keys.flat, GLFW_KEY_F);
+	key_once(window, &env->keys.grey, GLFW_KEY_G);
 	change_rotate_speed(window, env);
 	change_move_speed(window, env);
 	change_rotate(window, env, GLFW_KEY_X, &env->keys.x);

@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 13:48:14 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 14:58:49 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void		print_command(void)
 	printf("Page up/down : move object on Z axis\n");
 	printf("P : Polygon mode\n");
 	printf("F : Activate/Deactivate flat/smooth mode\n");
+	printf("G : Activate/Deactivate grey mode\n");
 	printf("T : Activate/Deactivate texture mode\n");
 	printf("X Y Z : Change rotation axis\n");
 	printf("M : Pause rotation\n");
@@ -55,6 +56,7 @@ void		draw(t_env *env)
 	glUniformMatrix4fv(env->vp_loc, 1, GL_FALSE, env->vp.m);
 	glUniformMatrix4fv(env->model_loc, 1, GL_TRUE, env->model.m);
 	glUniform1i(env->flat_loc, env->keys.flat.active);
+	glUniform1i(env->grey_loc, env->keys.grey.active);
 	glUniform1i(env->tex_loc, env->keys.texture.active);
 	glBindVertexArray(env->vao);
 	glDrawElements(GL_TRIANGLES, env->info.nb_face * 3, GL_UNSIGNED_INT, 0);

@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:46:51 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 13:39:06 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 14:58:13 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,5 @@ void		init_mat(t_env *env)
 	env->model_loc = glGetUniformLocation(env->shader_program, "model");
 	env->tex_loc = glGetUniformLocation(env->shader_program, "texOn");
 	env->flat_loc = glGetUniformLocation(env->shader_program, "f");
+	env->grey_loc = glGetUniformLocation(env->shader_program, "greyOn");
 }

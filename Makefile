@@ -62,4 +62,4 @@ re :
 	$(MAKE) all
 
 norm :
-	norminette src inc $(LIB_PATH)/libmat/inc $(LIB_PATH)/libmat/src $(LIB_PATH)/libft/inc $(LIB_PATH)/libft/src
+	norminette src inc $(LIB_PATH)libmat/inc $(LIB_PATH)libmat/src $(LIB_PATH)libft/inc $(LIB_PATH)libft/src
