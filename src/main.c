@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 13:41:10 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 13:48:14 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,12 @@ int			main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_putendl("Usage: ./scop file");
+		printf("Usage: ./scop file\n");
+		return (0);
+	}
+	if (ft_strstr(argv[1], ".obj") == NULL)
+	{
+		printf("Not an obj file.\n");
 		return (0);
 	}
 	if (!parse(&env, argv[1]) || !init(&env) || !compile_shader(&env))
