@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 11:55:30 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 13:40:14 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 13:51:56 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	key_once(GLFWwindow *window, t_key *key, int keycode)
 		key->key = 1;
 }
 
-void resize_callback(GLFWwindow* window, int width, int height)
+void	resize_callback(GLFWwindow *window, int width, int height)
 {
 	(void)window;
 	glViewport(0, 0, width, height);
