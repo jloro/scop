@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 15:04:36 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 12:26:57 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 14:16:19 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,10 @@ int					parse(t_env *env, char *file)
 	info.max = vec3_set(0, 0, 0);
 	info.min = vec3_set(0, 0, 0);
 	if (!get(fd, &info))
+	{
+		printf("Error in parsing.\n");
 		return (0);
+	}
 	info.center = vec3_mulf(vec3_add(info.max, info.min), 0.5f);
 	calc_color(&info);
 	close(fd);
