@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 11:57:29 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 16:55:52 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 11:54:04 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int					init_texture(t_env *env)
 int					initglfw(t_env *env)
 {
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	env->window = glfwCreateWindow(WIDTH_SCREEN, HEIGHT_SCREEN,
@@ -64,7 +64,6 @@ int					initglfw(t_env *env)
 		glfwTerminate();
 		return (0);
 	}
-	glfwSetFramebufferSizeCallback(env->window, resize_callback);
 	return (1);
 }
 
@@ -97,6 +96,8 @@ void				init_keys(t_env *env)
 
 int					init(t_env *env)
 {
+	env->width = WIDTH_SCREEN;
+	env->height = HEIGHT_SCREEN;
 	init_keys(env);
 	if (!initglfw(env) || !init_texture(env))
 		return (0);

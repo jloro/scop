@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:32:44 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 18:03:10 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 11:56:07 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,11 @@ typedef struct		s_env
 	GLuint			texture;
 	float			rotate_speed;
 	float			move_speed;
+	int				height;
+	int				width;
 }					t_env;
 
-void				resize_callback(GLFWwindow *window, int width, int height);
+void				resize_callback(GLFWwindow *window, t_env *env);
 int					init(t_env *env);
 void				init_mat(t_env *env);
 int					parse(t_env *env, char *file);
@@ -89,5 +91,8 @@ void				calc_max_min(t_parse *info, GLfloat *tmp);
 int					send_opengl(t_parse *info, t_env *env);
 int					add_face_if(int select[2], char *line, t_parse *info,
 						GLuint *tmp);
+void				shader(GLFWwindow *window, t_env *env);
+void				refresh(t_env *env);
+void				key_once(GLFWwindow *window, t_key *key, int keycode);
 
 #endif

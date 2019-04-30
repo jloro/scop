@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 15:47:42 by jloro             #+#    #+#             */
-/*   Updated: 2018/01/13 05:00:25 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 12:03:29 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "string.h"
 # include "ctype.h"
 # include "unistd.h"
-# include "includes/get_next_line.h"
+# include "get_next_line.h"
 
 typedef	struct		s_list
 {

@@ -14,6 +14,6 @@ void main()
 	if (tex == 0)
 		FragColor = vec4(is_flat == 1 ? f_color : s_color, 1.0f);
 	else 
-		FragColor = texture(myText, (-pos.zy + vec2(1.0) / 2));
+		FragColor = texture(myText, -pos.zy);
 }
 

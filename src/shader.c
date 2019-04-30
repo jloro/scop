@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:10:53 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/19 17:06:11 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 11:54:24 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "libft.h"
+
+void		shader(GLFWwindow *window, t_env *env)
+{
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS && env->keys.shader.key)
+	{
+		compile_shader(env);
+		env->keys.shader.key = 0;
+	}
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_RELEASE && !env->keys.shader.key)
+		env->keys.shader.key = 1;
+}
 
 int			create_program(t_env *env, GLuint shader[2])
 {

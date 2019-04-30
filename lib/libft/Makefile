@@ -1,18 +1,9 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jloro <marvin@42.fr>                       +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/11/09 18:28:21 by jloro             #+#    #+#              #
-#    Updated: 2018/01/11 16:21:13 by jloro            ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+CC = gcc
+FLAGS = -Wall -Wextra -Werror
 
 NAME = libft.a
 
-SRC = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
+SRC_FILES = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 		ft_isdigit.c ft_isprint.c ft_itoa.c ft_lstadd.c ft_lstdel.c \
 		ft_lstdelone.c ft_lstiter.c ft_lstmap.c ft_lstnew.c \
 		ft_memalloc.c ft_memccpy.c ft_memchr.c ft_memcmp.c \
@@ -30,19 +21,37 @@ SRC = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 		get_next_line.c ft_2compte_c.c ft_2print.c ft_ischrcol.c ft_nbline.c \
 		ft_2tabdel.c ft_itoa_base.c ft_power.c ft_itoa_dec.c \
 
-OBJ = $(SRC:.c=.o)
+OBJ_FILES = $(SRC_FILES:.c=.o)
+
+SRC_PATH = ./src/
+OBJ_PATH = ./obj/
+INC_PATH = ./inc/
+
+SRCS = $(addprefix $(SRC_PATH),$(SRC_FILES))
+OBJS = $(addprefix $(OBJ_PATH),$(OBJ_FILES))
+INCS = -I $(INC_PATH)
+
+.PHONY : all clean fclean re
 
 all : $(NAME)
 
-$(NAME) : $(SRC)
-	@gcc -c -Werror -Wextra -Wall $(SRC)
-	@ar rc $(NAME) $(OBJ)
+$(NAME) : $(OBJS)
+	@ar rc $(NAME) $(OBJS)
 	@ranlib $(NAME)
+	@echo "$(NAME) compiled ✓"
+
+$(OBJ_PATH)%.o : $(SRC_PATH)%.c
+	@mkdir -p $(OBJ_PATH)
+	@$(CC) $(FLAGS) $(INCS) -o $@ -c $<
+	@echo "$@ created ✓"
 
 clean :
-	@rm -f $(OBJ)
+	@/bin/rm -rf $(OBJ_PATH)
+	@echo "Objects cleaned ✓"
 
 fclean : clean
-	@rm -f $(NAME)
-
-re : fclean all
+	@/bin/rm -f $(NAME)
+	@echo "$(NAME) deleted ✓"
+re : 
+	$(MAKE) fclean
+	$(MAKE) all

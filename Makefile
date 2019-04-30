@@ -9,6 +9,7 @@ SRC_FILES = main.c \
 			xpm.c \
 			init.c \
 			callback.c \
+			callback_utils.c \
 			init_mat.c \
 			parsing.c \
 			parsing_utils.c \
@@ -57,3 +58,6 @@ fclean : clean
 re :
 	$(MAKE) fclean
 	$(MAKE) all
+
+norm :
+	norminette src inc $(LIB_PATH)/libmat/inc $(LIB_PATH)/libmat/src $(LIB_PATH)/libft/inc $(LIB_PATH)/libft/src

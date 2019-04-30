@@ -6,11 +6,11 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 12:29:29 by jloro             #+#    #+#             */
-/*   Updated: 2018/01/14 20:02:10 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 12:03:52 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/get_next_line.h"
+#include "get_next_line.h"
 
 int					readfd(const int fd, char **buf)
 {
