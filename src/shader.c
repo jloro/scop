@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:10:53 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 11:54:24 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 12:26:34 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "libft.h"
+#include <stdio.h>
 
 void		shader(GLFWwindow *window, t_env *env)
 {
@@ -94,11 +95,13 @@ int			compile_shader(t_env *env)
 	GLuint	shader[2];
 	char	*shader_source[2];
 
-	ft_putendl("Compile Shader");
-	if ((shader_source[0] = read_shader("shaders/vertexShader.glsl")) == NULL)
+	if ((shader_source[0] = read_shader("shaders/vertexShader.glsl")) == NULL
+			|| ((shader_source[1] = read_shader("shaders/fragShader.glsl")) ==
+				NULL))
+	{
+		printf("Can't find shader files.\n");
 		return (0);
-	if ((shader_source[1] = read_shader("shaders/fragShader.glsl")) == NULL)
-		return (0);
+	}
 	create_shader(&(shader[0]), GL_VERTEX_SHADER, shader_source[0]);
 	create_shader(&(shader[1]), GL_FRAGMENT_SHADER, shader_source[1]);
 	create_program(env, shader);
@@ -106,6 +109,5 @@ int			compile_shader(t_env *env)
 	glDeleteShader(shader[1]);
 	free(shader_source[0]);
 	free(shader_source[1]);
-	ft_putendl("Finish");
 	return (1);
 }

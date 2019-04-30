@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 17:48:42 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 18:04:26 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 12:27:20 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void		calc_max_min(t_parse *info, GLfloat *tmp)
 
 int			send_opengl(t_parse *info, t_env *env)
 {
-	printf("Send vertices/face to openCL\n");
 	glGenVertexArrays(1, &env->vao);
 	glGenBuffers(1, &env->vbo);
 	glGenBuffers(1, &env->ebo);
@@ -46,7 +45,6 @@ int			send_opengl(t_parse *info, t_env *env)
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	printf("Finish\n");
 	return (1);
 }
 

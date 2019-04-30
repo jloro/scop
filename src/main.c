@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 11:41:18 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 12:28:25 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,22 @@
 #include "libmat.h"
 #include <math.h>
 #include <stdio.h>
+
+void		print_command(void)
+{
+	printf("=== COMMANDS ===\n");
+	printf("Arrows : move object on X/Y axis\n");
+	printf("Page up/down : move object on Z axis\n");
+	printf("P : Polygon mode\n");
+	printf("F : Activate/Deactivate flat/smooth mode\n");
+	printf("T : Activate/Deactivate texture mode\n");
+	printf("X Y Z : Change rotation axis\n");
+	printf("M : Pause rotation\n");
+	printf("- + : Change rotation speed\n");
+	printf("keypad - + : Change move speed\n");
+	printf("H : Recompile shader\n");
+	printf("R : Reset\n");
+}
 
 void		rotate(t_env *env)
 {
@@ -46,7 +62,7 @@ void		draw(t_env *env)
 
 int			loop(t_env *env)
 {
-	printf("start loop\n");
+	print_command();
 	glEnable(GL_DEPTH_TEST);
 	while (!glfwWindowShouldClose(env->window))
 	{
@@ -69,7 +85,6 @@ int			loop(t_env *env)
 	glDeleteBuffers(1, &env->vbo);
 	glDeleteBuffers(1, &env->ebo);
 	glfwTerminate();
-	printf("end loop\n");
 	return (1);
 }
 

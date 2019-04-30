@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 15:04:36 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/29 18:06:50 by jloro            ###   ########.fr       */
+/*   Updated: 2019/04/30 12:26:57 by jloro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int					get(int fd, t_parse *info)
 	char			*line;
 	int				ret;
 
-	ft_putendl("Start parsing");
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
 		if (line[0] == 'v' && line[1] == ' ')
@@ -96,7 +95,6 @@ int					get(int fd, t_parse *info)
 		ft_putendl(strerror(errno));
 		return (0);
 	}
-	ft_putendl("End parsing");
 	return (1);
 }
 
