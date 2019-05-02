@@ -54,3 +54,4 @@ dkms.conf
 
 lib/glfw/build
 *.swp
+.DS_Store
