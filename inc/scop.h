@@ -6,13 +6,14 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:32:44 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 14:58:25 by jloro            ###   ########.fr       */
+/*   Updated: 2019/10/10 16:15:27 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SCOP_H
 # define SCOP_H
 
+#include <glad.h>
 # include <GLFW/glfw3.h>
 # include "libmat.h"
 

@@ -6,11 +6,10 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:41:12 by jloro             #+#    #+#             */
-/*   Updated: 2019/04/30 14:58:49 by jloro            ###   ########.fr       */
+/*   Updated: 2019/10/10 16:14:59 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "glad.h"
 #include "libft.h"
 #include "scop.h"
 #include "libmat.h"
