@@ -7,7 +7,7 @@ Scop is a 42 project. You have to parse and display a *.obj* file using openGL i
 
 ### Installing
 
-Just git clone with submodule and run `make`.
+Just git clone with submodule and run `cmake -B build`.
 
 ```
 git clone --recurse-submodule https://github.com/jloro/scop.git
