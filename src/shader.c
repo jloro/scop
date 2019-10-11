@@ -6,7 +6,7 @@
 /*   By: jloro <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 16:10:53 by jloro             #+#    #+#             */
-/*   Updated: 2019/10/10 16:17:41 by jules            ###   ########.fr       */
+/*   Updated: 2019/10/11 10:33:32 by jules            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ int			compile_shader(t_env *env)
 	GLuint	shader[2];
 	char	*shader_source[2];
 
-	if ((shader_source[0] = read_shader("../../shaders/vertexShader.glsl")) == NULL
-			|| ((shader_source[1] = read_shader("../../shaders/fragShader.glsl")) ==
+	if ((shader_source[0] = read_shader("shaders/vertexShader.glsl")) == NULL
+			|| ((shader_source[1] = read_shader("shaders/fragShader.glsl")) ==
 				NULL))
 	{
 		printf("Can't find shader files.\n");
